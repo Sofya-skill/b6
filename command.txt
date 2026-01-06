@@ -1,0 +1,4 @@
+sudo ssh-keygen -t rsa -b 4096 -f ./id_rsa_user1
+sudo ansible-vault encrypt ./id_rsa_user1 --output ./encrypted_id_rsa_user1.yml
+ansible-playbook /etc/ansible/playbooks/user.yml --become --ask-become-pass --vault-password-file /etc/ansible/playbooks/files/.vault_pass.txt
+ 
