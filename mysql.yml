@@ -1,0 +1,17 @@
+- name: Install mysql-server
+  hosts: skillfactory
+  gather_facts: yes
+  become: yes
+  tasks:
+   - name: update package
+     apt:
+      update_cache: yes
+   - name: install mysql
+     apt:
+      name: mysql-server
+      state: present
+   - name: start the server
+     service:
+      name: mysql
+      state: started
+      enabled: yes

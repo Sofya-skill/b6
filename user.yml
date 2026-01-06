@@ -1,0 +1,40 @@
+- name: User creation
+  hosts: skillfactory
+  become: yes
+  vars:
+   new_user: user1
+   ssh_private_key: encrypted_id_rsa_user1.yml
+   ssh_public_key: id_rsa_user1.pub
+  
+  tasks:
+  
+   - name: create user
+     ansible.builtin.user:
+      name: "{{ new_user }}"
+      state: present
+      shell: /bin/bash
+      home: "/home/{{ new_user }}"
+
+   - name: create directory 
+     ansible.builtin.file:
+      path: "/home/{{ new_user }}/.ssh"
+      state: directory
+      mode: 0700
+      owner: "{{ new_user }}"
+      group: "{{ new_user }}"
+
+   - name: copy private key
+     ansible.builtin.copy:
+       src: "{{ ssh_private_key }}"
+       dest: "/home/{{ new_user }}/.ssh/id_rsa"
+       owner: "{{ new_user }}"
+       group: "{{ new_user }}"
+       mode: '0600'
+
+   - name: copy public key 
+     ansible.builtin.copy:
+       src: "{{ ssh_public_key }}"
+       dest: "/home/{{ new_user }}/.ssh/authorized_keys"
+       owner: "{{ new_user }}"
+       group: "{{ new_user }}"
+       mode: '0600' 
