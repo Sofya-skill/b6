@@ -1,0 +1,36 @@
+- name: Setup or delete postfix
+  hosts: skillfactory
+  become: yes
+
+  tasks:
+
+   - name: install postfix
+     apt:
+      name: postfix
+      state: present
+     tags:
+      - init postfix
+
+   - name: start postfix
+     service:
+      name: postfix
+      state: started
+      enabled: true 
+     tags:
+      - init postfix
+
+   - name: stop postfix
+     service:
+      name: postfix
+      state: stopped
+      enabled: false
+     tags:
+      - drop postfix
+
+   - name: delete postfix
+     apt:
+      name: postfix
+      state: absent
+      purge: yes
+     tags:
+      - drop postfix
